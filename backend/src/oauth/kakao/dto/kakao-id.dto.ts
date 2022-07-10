@@ -1,3 +1,6 @@
 export class KakaoIdDto {
-  constructor(public readonly kakaoId: string) {}
+  kakaoId: string;
+  constructor(public readonly kakaoAccount: KakaoAccountAPIResponse) {
+    this.kakaoId = String(kakaoAccount.id);
+  }
 }

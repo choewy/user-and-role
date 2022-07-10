@@ -16,74 +16,71 @@ export class KakaoApiRequest {
 
   constructor(private readonly kakaoException: KakaoException) {}
 
-  // 카카오 인증 토큰 발급
-  async getTokens(code: string) {
-    const { access_token, refresh_token } = await axios({
-      method: 'GET',
+  // 카카오 토큰 발급 API
+  private async kakaoGetTokenAPI(code: string) {
+    const response = await axios({
+      method: 'POST',
       url: this.urls.tokenAPI,
       params: {
         grant_type: 'authorization_code',
-        client_id: KAKAO.clientKey,
+        client_id: KAKAO.adminKey,
         redirect_uri: KAKAO.loginRedirectURL,
         code,
       },
     })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => err.response);
 
-    if (!access_token) {
+    if (response.data as KakaoTokenAPIError) {
       this.kakaoException.serverError();
     }
 
-    return new KakaoTokenDto(access_token, refresh_token);
+    return response as KakaoTokenAPIReponse;
   }
 
-  // 카카오 인증 토큰 갱신
-  async reissueTokens(kakaoRefreshToken: string) {
-    const { access_token, refresh_token } = await axios({
+  // 카카오 토큰 갱신 API
+  private async kakaoReissueTokenAPI(refreshToken: string) {
+    const response = await axios({
       method: 'POST',
       url: this.urls.tokenAPI,
       params: {
         grant_type: 'refresh_token',
         client_id: KAKAO.clientKey,
-        refresh_token: kakaoRefreshToken,
+        refresh_token: refreshToken,
       },
     })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => err.response);
 
-    if (!access_token) {
+    if (response.data as KakaoTokenAPIError) {
       this.kakaoException.serverError();
     }
 
-    return new KakaoTokenDto(
-      access_token,
-      refresh_token ? refresh_token : kakaoRefreshToken,
-    );
+    return response as KakaoTokenAPIReponse;
   }
 
-  // 카카오 id 확인
-  async getKakaoId(kakaoAccessToken: string) {
-    const { id } = await axios({
+  // 카카오 계정 API
+  private async kakaoAccountAPI(accessToken: string) {
+    const response = await axios({
       method: 'GET',
       url: this.urls.accountAPI,
       headers: {
-        Authorization: `Bearer ${kakaoAccessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => err.response);
 
-    if (!id) {
+    if (response.data as KakaoAccountAPIError) {
       this.kakaoException.serverError();
     }
 
-    return new KakaoIdDto(String(id));
+    return response as KakaoAccountAPIResponse;
   }
 
-  // 카카오 프로필 조회
-  async getProfile(kakaoId: string) {
-    const { properties } = await axios({
+  // 카카오 프로필 API
+  private async kakaoProfileAPI(kakaoId: string) {
+    const response = await axios({
       method: 'GET',
       url: this.urls.profileAPI,
       headers: {
@@ -96,16 +93,38 @@ export class KakaoApiRequest {
       },
     })
       .then((res) => res.data)
-      .catch((err) => err.response.data);
+      .catch((err) => err.response);
 
-    if (!properties) {
+    if (response.data as KakaoProfileAPIError) {
       this.kakaoException.serverError();
     }
 
-    return new KakaoProfileDto(
-      properties.nickname,
-      properties.profile_image,
-      properties.thumbnail_image,
-    );
+    return response as KakaoProfileAPIResponse;
+  }
+
+  // 카카오 인증 토큰 발급
+  async getTokens(code: string) {
+    const kakaoTokens = await this.kakaoGetTokenAPI(code);
+    return new KakaoTokenDto(kakaoTokens);
+  }
+
+  // 카카오 인증 토큰 갱신
+  async reissueTokens(refreshToken: string) {
+    const kakaoTokens = await this.kakaoReissueTokenAPI(refreshToken);
+    const { refresh_token } = kakaoTokens;
+    kakaoTokens.refresh_token = refresh_token ? refresh_token : refreshToken;
+    return new KakaoTokenDto(kakaoTokens);
+  }
+
+  // 카카오 id 확인
+  async getKakaoId(accessToken: string) {
+    const kakaoAccount = await this.kakaoAccountAPI(accessToken);
+    return new KakaoIdDto(kakaoAccount);
+  }
+
+  // 카카오 프로필 조회
+  async getProfile(kakaoId: string) {
+    const kakaoProfile = await this.kakaoProfileAPI(kakaoId);
+    return new KakaoProfileDto(kakaoProfile);
   }
 }
