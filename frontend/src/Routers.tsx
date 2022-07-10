@@ -8,11 +8,13 @@ import {
   KakaoRedirectPage,
 } from './components/Pages';
 import { PAGE_PATH } from './constant';
-import { AuthState } from './state';
 
-const Routers: React.FC = () => {
-  const [authState, _] = useRecoilState(AuthState);
-  console.log(authState);
+interface RoutersProps {
+  authState: any;
+}
+
+const Routers: React.FC<RoutersProps> = (props) => {
+  const { authState } = props;
   return (
     <BrowserRouter>
       <Suspense fallback={<ShimmerPage />}>

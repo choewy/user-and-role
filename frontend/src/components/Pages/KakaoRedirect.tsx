@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { kakaoGetTokenAPI } from '../../api';
-import { customCookie } from '../../utils';
+import { customCookie, customQuery } from '../../utils';
 
 const KakaoRedirectPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +10,8 @@ const KakaoRedirectPage: React.FC = () => {
   const signCode = String(
     new URL(window.location.href).searchParams.get('signCode'),
   );
+
+  console.log(customQuery());
 
   const getKakaoCredentials = useCallback(async () => {
     const credentials = await kakaoGetTokenAPI(signCode);

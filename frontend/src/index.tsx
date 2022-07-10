@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import { RecoilRoot } from 'recoil';
-import { GlobalStyle } from './styles';
-import Routers from './Routers';
 import App from './App';
 
 const root = ReactDOM.createRoot(
@@ -12,11 +9,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <App />
-      <Routers />
-      <GlobalStyle />
-    </RecoilRoot>
+    <App />
   </React.StrictMode>,
 );
 

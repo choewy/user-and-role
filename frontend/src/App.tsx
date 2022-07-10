@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { checkAuthAPI } from './api';
-import { useSetRecoilState } from 'recoil';
-import { AuthState } from './state';
+import Routers from './Routers';
 
 const App: React.FC = () => {
   const effectRef = useRef<boolean>(false);
-  const setAuthState = useSetRecoilState(AuthState);
+  const [authState, setAuthState] = useState();
 
   const authencitacation = useCallback(async () => {
     const { user } = await checkAuthAPI();
@@ -24,7 +23,7 @@ const App: React.FC = () => {
     }
   }, []);
 
-  return <></>;
+  return <Routers authState={authState} />;
 };
 
 export default App;
