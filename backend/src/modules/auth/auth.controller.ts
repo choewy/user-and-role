@@ -9,19 +9,20 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { KAKAO } from 'src/app.config';
-import { Payload } from 'src/decorators/payload.decorator';
-import { SignGuard } from 'src/guards/sign/sign.guard';
+import { KakaoID } from 'src/decorators/kakao.decorator';
+import { KakaoGuard } from 'src/guards/kakao/kakao.guard';
 import { AuthService } from './auth.service';
-import { CreateTokenDto } from './dto/create-token.dto';
+import { SignCodeDto } from './dto/sign-code.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get()
-  @UseGuards(SignGuard)
-  async checkAuth(@Payload() payload: Payload) {
-    return payload;
+  @UseGuards(KakaoGuard)
+  async getAuthAndProfile(@KakaoID() kakaoId: string) {
+    console.log(kakaoId);
+    return await this.authService.getKakaoProfile(kakaoId);
   }
 
   @Get('kakao')
@@ -30,8 +31,9 @@ export class AuthController {
     return res.redirect(`${KAKAO.clientRedirectURL}?signCode=${signCode}`);
   }
 
-  @Post('token')
-  async createTokenWithSignCode(@Body() createTokenDto: CreateTokenDto) {
-    return await this.authService.createTokenWithSignCode(createTokenDto);
+  @Post('kakao/token')
+  async getKakaoTokenWithSignCode(@Body() signCodeDto: SignCodeDto) {
+    const { signCode } = signCodeDto;
+    return await this.authService.getKakaoTokenWithSignCode(signCode);
   }
 }

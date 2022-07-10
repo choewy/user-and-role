@@ -3,13 +3,25 @@ import { JwtResisger } from 'src/app.util';
 import { DatabaseModule } from 'src/database/database.module';
 import { UserProvider } from 'src/database/providers/user.provider';
 import { AuthRepository } from 'src/database/repositories/auth.repository';
-import { SignModule } from 'src/guards/sign/sign.module';
+import { KakaoModule } from 'src/guards/kakao/kakao.module';
 import { AuthController } from './auth.controller';
+import { AuthException } from './auth.exception';
 import { AuthService } from './auth.service';
+import { KakaoApiRequest } from '../../oauth/kakao/kakao-api.request';
+import { KakaoApiUrl } from '../../oauth/kakao/kakao-api.url';
+import { KakaoException } from '../../oauth/kakao/kakao-api.exception';
 
 @Module({
-  imports: [DatabaseModule, JwtResisger, SignModule],
-  providers: [UserProvider, AuthRepository, AuthService],
+  imports: [DatabaseModule, JwtResisger, KakaoModule],
+  providers: [
+    UserProvider,
+    KakaoApiUrl,
+    KakaoApiRequest,
+    KakaoException,
+    AuthRepository,
+    AuthService,
+    AuthException,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
