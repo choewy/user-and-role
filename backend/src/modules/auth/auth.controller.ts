@@ -21,12 +21,16 @@ export class AuthController {
   @Get()
   @UseGuards(KakaoGuard)
   async getAuthAndProfile(@KakaoID() kakaoId: string) {
-    console.log(kakaoId);
     return await this.authService.getKakaoProfile(kakaoId);
   }
 
   @Get('kakao')
-  async signWithKakao(@Query('code') code: string, @Res() res: Response) {
+  kakaoLoginPage() {
+    return this.authService.kakaoLoginPageUrl();
+  }
+
+  @Get('kakao/redirect')
+  async redirectKakaoSign(@Query('code') code: string, @Res() res: Response) {
     const signCode = await this.authService.signWithKakao(code);
     return res.redirect(`${KAKAO.clientRedirectURL}?signCode=${signCode}`);
   }

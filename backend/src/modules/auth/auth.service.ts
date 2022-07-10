@@ -13,6 +13,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  kakaoLoginPageUrl() {
+    return {
+      url: this.kakaoApiRequest.kakaoLoginPageUrl(),
+    };
+  }
+
   // 카카오 code로 로그인 or 회원가입 처리
   async signWithKakao(code: string) {
     const kakaoTokens = await this.kakaoApiRequest.getTokens(code);
@@ -34,6 +40,7 @@ export class AuthService {
 
   // 카카오 토큰 반환
   async getKakaoTokenWithSignCode(signCode: string) {
+    console.log(signCode);
     const user = await this.authRepository.selectWithSignCode(signCode);
 
     if (!user) {
@@ -41,14 +48,11 @@ export class AuthService {
     }
 
     await this.authRepository.deleteSignCode(user.userId);
-    const { kakaoTokens } = this.jwtService.decode(
+    const decoded = this.jwtService.decode(
       signCode,
     ) as SignCodeWithKakaoPayload;
 
-    return {
-      tokenType: 'kakao',
-      tokens: kakaoTokens,
-    };
+    return decoded;
   }
 
   // 카카오 프로필 조회

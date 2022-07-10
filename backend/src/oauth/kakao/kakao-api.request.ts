@@ -16,6 +16,19 @@ export class KakaoApiRequest {
 
   constructor(private readonly kakaoException: KakaoException) {}
 
+  // 카카오 로그인 페이지 URL
+  kakaoLoginPageUrl() {
+    const url = 'https://kauth.kakao.com/oauth/authorize';
+    const queries = {
+      response_type: 'code',
+      client_id: KAKAO.clientKey,
+      redirect_uri: KAKAO.loginRedirectURL,
+    };
+    return `${url}?${Object.entries(queries)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&')}`;
+  }
+
   // 카카오 토큰 발급 API
   private async kakaoGetTokenAPI(code: string) {
     const response = await axios({

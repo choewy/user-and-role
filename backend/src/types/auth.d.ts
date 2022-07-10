@@ -3,10 +3,12 @@ declare global {
     userId: string;
   }
   interface KakaoTokens {
+    tokenType: 'kakao';
     accessToken: string;
     refreshToken: string;
   }
   interface SignCodeWithKakaoPayload {
+    kakaoId: string;
     kakaoTokens: KakaoTokens;
   }
 }
