@@ -8,14 +8,12 @@ import { AuthController } from './auth.controller';
 import { AuthException } from './auth.exception';
 import { AuthService } from './auth.service';
 import { KakaoApiRequest } from '../../oauth/kakao/kakao-api.request';
-import { KakaoApiUrl } from '../../oauth/kakao/kakao-api.url';
 import { KakaoException } from '../../oauth/kakao/kakao-api.exception';
 
 @Module({
   imports: [DatabaseModule, JwtResisger, KakaoModule],
   providers: [
     UserProvider,
-    KakaoApiUrl,
     KakaoApiRequest,
     KakaoException,
     AuthRepository,

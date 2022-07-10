@@ -1,21 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { KakaoException } from './kakao-api.exception';
-import { KakaoApiUrl } from './kakao-api.url';
+import { KakaoProfileDto } from './dto/kakao-profile.dto';
+import { KakaoIdDto } from './dto/kakao-id.dto';
+import { KakaoTokenDto } from './dto/kakao-token.dto';
 import { KAKAO } from 'src/app.config';
 import axios from 'axios';
 
 @Injectable()
 export class KakaoApiRequest {
-  constructor(
-    private readonly kakaoApiUrl: KakaoApiUrl,
-    private readonly kakaoException: KakaoException,
-  ) {}
+  private urls = {
+    tokenAPI: 'https://kauth.kakao.com/oauth/token',
+    accountAPI: 'https://kapi.kakao.com/v1/user/access_token_info',
+    profileAPI: 'https://kapi.kakao.com/v2/user/me',
+  };
+
+  constructor(private readonly kakaoException: KakaoException) {}
 
   // 카카오 인증 토큰 발급
   async getTokens(code: string) {
-    const url = this.kakaoApiUrl.GET_TOKENS_API_URL(code);
-    const { access_token, refresh_token } = await axios
-      .get(url)
+    const { access_token, refresh_token } = await axios({
+      method: 'GET',
+      url: this.urls.tokenAPI,
+      params: {
+        grant_type: 'authorization_code',
+        client_id: KAKAO.clientKey,
+        redirect_uri: KAKAO.loginRedirectURL,
+        code,
+      },
+    })
       .then((res) => res.data)
       .catch((err) => err.response.data);
 
@@ -23,17 +35,20 @@ export class KakaoApiRequest {
       this.kakaoException.serverError();
     }
 
-    return {
-      accessToken: String(access_token),
-      refreshToken: String(refresh_token),
-    };
+    return new KakaoTokenDto(access_token, refresh_token);
   }
 
   // 카카오 인증 토큰 갱신
   async reissueTokens(kakaoRefreshToken: string) {
-    const url = this.kakaoApiUrl.REISSUE_TOKENS_API_URL(kakaoRefreshToken);
-    const { access_token, refresh_token } = await axios
-      .post(url)
+    const { access_token, refresh_token } = await axios({
+      method: 'POST',
+      url: this.urls.tokenAPI,
+      params: {
+        grant_type: 'refresh_token',
+        client_id: KAKAO.clientKey,
+        refresh_token: kakaoRefreshToken,
+      },
+    })
       .then((res) => res.data)
       .catch((err) => err.response.data);
 
@@ -41,20 +56,21 @@ export class KakaoApiRequest {
       this.kakaoException.serverError();
     }
 
-    const refreshToken = refresh_token ? refresh_token : kakaoRefreshToken;
-
-    return {
-      accessToken: String(access_token),
-      refreshToken: String(refreshToken),
-    };
+    return new KakaoTokenDto(
+      access_token,
+      refresh_token ? refresh_token : kakaoRefreshToken,
+    );
   }
 
   // 카카오 id 확인
   async getKakaoId(kakaoAccessToken: string) {
-    const url = this.kakaoApiUrl.GET_KAKAO_ID_API_URL();
-    const headers = { Authorization: `Bearer ${kakaoAccessToken}` };
-    const { id } = await axios
-      .get(url, { headers })
+    const { id } = await axios({
+      method: 'GET',
+      url: this.urls.accountAPI,
+      headers: {
+        Authorization: `Bearer ${kakaoAccessToken}`,
+      },
+    })
       .then((res) => res.data)
       .catch((err) => err.response.data);
 
@@ -62,17 +78,23 @@ export class KakaoApiRequest {
       this.kakaoException.serverError();
     }
 
-    return {
-      kakaoId: String(id),
-    };
+    return new KakaoIdDto(String(id));
   }
 
   // 카카오 프로필 조회
   async getProfile(kakaoId: string) {
-    const url = this.kakaoApiUrl.GET_PROFILE_API_URL(kakaoId);
-    const headers = { Authorization: `KakaoAK ${KAKAO.adminKey}` };
-    const { properties } = await axios
-      .get(url, { headers })
+    const { properties } = await axios({
+      method: 'GET',
+      url: this.urls.profileAPI,
+      headers: {
+        Authorization: `KakaoAK ${KAKAO.adminKey}`,
+      },
+      params: {
+        target_id_type: 'user_id',
+        target_id: kakaoId,
+        secure_resource: KAKAO.secure,
+      },
+    })
       .then((res) => res.data)
       .catch((err) => err.response.data);
 
@@ -80,12 +102,10 @@ export class KakaoApiRequest {
       this.kakaoException.serverError();
     }
 
-    console.log(properties);
-
-    return {
-      nickname: String(properties.nickname),
-      profileImageUrl: String(properties.profile_image),
-      thumbnailImageUrl: String(properties.thumbnail_image),
-    };
+    return new KakaoProfileDto(
+      properties.nickname,
+      properties.profile_image,
+      properties.thumbnail_image,
+    );
   }
 }
