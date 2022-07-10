@@ -9,7 +9,6 @@ import Select from './Select';
 import Span from './Span';
 import SubTitle from './SubTitle';
 import Title from './Title';
-import KakaoLoginAnchor from './KakaoLoginAnchor';
 
 export {
   Button,
@@ -23,5 +22,4 @@ export {
   Span,
   SubTitle,
   Title,
-  KakaoLoginAnchor,
 };
