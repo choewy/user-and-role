@@ -9,6 +9,7 @@ export class AuthRepository {
     private readonly repository: Repository<User>,
   ) {}
 
+  // kakaoId로 사용자 조회
   async selectWithKakaoId(kakaoId: string) {
     return await this.repository
       .createQueryBuilder('auth')
@@ -17,14 +18,12 @@ export class AuthRepository {
       .getOne();
   }
 
+  // kakaoId로 회원가입
   async createWithKakaoId(kakaoId: string) {
     return await this.repository.save({ kakaoId });
   }
 
-  async updateSignCode(userId: string, signCode: string) {
-    await this.repository.update({ userId }, { signCode });
-  }
-
+  // SignCode로 사용자 조회
   async selectWithSignCode(signCode: string) {
     return await this.repository
       .createQueryBuilder('auth')
@@ -33,7 +32,13 @@ export class AuthRepository {
       .getOne();
   }
 
+  // SignCode 저장
+  async updateSignCode(userId: string, signCode: string) {
+    await this.repository.update({ userId }, { signCode });
+  }
+
+  // SignCode 삭제
   async deleteSignCode(userId: string) {
-    await this.repository.update({ userId }, { signCode: null });
+    await this.repository.update({ userId }, { signCode: '' });
   }
 }
