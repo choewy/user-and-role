@@ -1,3 +1,0 @@
-# modile
-
-- React-Native
