@@ -65,6 +65,7 @@ export const KAKAO = {
   adminKey: process.env.KAKAO_ADMIN_KEY,
   loginRedirectURL: process.env.KAKAO_LOGIN_REDIRECT_URL,
   clientRedirectURL: process.env.KAKAO_CLIENT_REDIRECT_URL,
+  secure: !isDevMode,
 };
 
 export const JWT: JwtModuleOptions = {
