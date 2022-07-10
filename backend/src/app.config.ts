@@ -9,7 +9,7 @@ const isDevMode = process.env.NODE_ENV === 'development';
 
 export const PORT = Number(process.env.PORT);
 export const CORS: CorsOptions = {
-  origin: [process.env.ORIGIN, '*'],
+  origin: process.env.ORIGIN,
   credentials: true,
 };
 
