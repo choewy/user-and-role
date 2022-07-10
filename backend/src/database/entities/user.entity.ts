@@ -21,7 +21,7 @@ export class User {
   @Column('varchar')
   kakaoId: string;
 
-  @Column('tinyint')
+  @Column({ type: 'tinyint', default: null })
   gender: number;
 
   @Column({ type: 'float', default: null })
@@ -33,7 +33,7 @@ export class User {
   @Column({ type: 'tinyint', default: 0 })
   role: number;
 
-  @Column({ type: 'varchar', default: null })
+  @Column({ type: 'text' })
   signCode: string;
 
   @OneToMany(() => Follow, (follow) => follow.userId, { cascade })
