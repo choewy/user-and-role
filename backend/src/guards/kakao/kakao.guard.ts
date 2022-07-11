@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { KakaoApiRequest } from 'src/oauth/kakao/kakao-api.request';
 
 @Injectable()
@@ -17,7 +22,10 @@ export class KakaoGuard implements CanActivate {
         request.id = kakaoId;
         return request;
       default:
-        return request;
+        throw new UnauthorizedException({
+          statusCode: 401,
+          message: 'not login',
+        });
     }
   }
 }
