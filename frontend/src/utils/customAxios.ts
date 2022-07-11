@@ -10,7 +10,7 @@ const customAxios = async (config: AxiosRequestConfig) => {
     headers,
   });
 
-  return await request(config)
+  return request(config)
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
