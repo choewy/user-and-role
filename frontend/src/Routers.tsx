@@ -1,33 +1,42 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { RouteComponent } from './components/Molecules';
 import {
-  HomePage,
-  ShimmerPage,
+  MainPage,
   KakaoLoginPage,
   KakaoRedirectPage,
 } from './components/Pages';
 import { PAGE_PATH } from './constant';
 
-interface RoutersProps {
-  authState: any;
-}
-
-const Routers: React.FC<RoutersProps> = (props) => {
-  const { authState } = props;
+const Routers: React.FC<GlobalProps> = ({ authState, setAuthState }) => {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<ShimmerPage />}>
-        <Routes>
-          <Route path={PAGE_PATH.HOME} element={<HomePage />} />
-          <Route path={PAGE_PATH.KAKAO_LOGIN} element={<KakaoLoginPage />} />
-          <Route
-            path={PAGE_PATH.KAKAO_REDIRECT}
-            element={<KakaoRedirectPage />}
+    <Routes>
+      <Route
+        path={PAGE_PATH.HOME}
+        element={<RouteComponent Component={MainPage} authState={authState} />}
+      />
+      <Route
+        path={PAGE_PATH.KAKAO_LOGIN}
+        element={
+          <RouteComponent
+            Component={KakaoLoginPage}
+            authState={authState}
+            authFlag={false}
           />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+        }
+      />
+      <Route
+        path={PAGE_PATH.KAKAO_REDIRECT}
+        element={
+          <RouteComponent
+            Component={KakaoRedirectPage}
+            authState={authState}
+            setAuthState={setAuthState}
+            authFlag={false}
+          />
+        }
+      />
+    </Routes>
   );
 };
 
