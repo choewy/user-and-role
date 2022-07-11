@@ -1,5 +1,6 @@
-import Content from './Content';
+import Header from './Header';
+import Navbar from './Navbar';
+import RouteComponent from './RouteComponent';
 import KakaoLoginAnchor from './KakaoAnchor';
-import Shimmer from './Shimmer';
 
-export { Content, Shimmer, KakaoLoginAnchor };
+export { Header, Navbar, RouteComponent, KakaoLoginAnchor };
