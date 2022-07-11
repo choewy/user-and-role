@@ -24,6 +24,7 @@ const customCookie = {
     cookie.set('tokenType', kakaoTokens.tokenType, options);
     cookie.set('accessToken', kakaoTokens.accessToken, options);
     cookie.set('refreshToken', kakaoTokens.refreshToken, options);
+    return true;
   },
 };
 
