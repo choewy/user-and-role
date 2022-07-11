@@ -1,9 +1,5 @@
-export type TQueryData = {
-  platform?: string;
-};
-
 interface CustomQuery {
-  (): TQueryData;
+  (): any;
 }
 
 const customQuery: CustomQuery = () => {
