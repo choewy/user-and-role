@@ -1,6 +1,6 @@
-import HomePage from './Home';
+import MainPage from './Main';
 import ShimmerPage from './ShimmerPage';
 import KakaoLoginPage from './KakaoLogin';
 import KakaoRedirectPage from './KakaoRedirect';
 
-export { HomePage, ShimmerPage, KakaoLoginPage, KakaoRedirectPage };
+export { MainPage, ShimmerPage, KakaoLoginPage, KakaoRedirectPage };
