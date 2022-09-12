@@ -1,10 +1,10 @@
 import { registerAs } from '@nestjs/config';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-import { ConfigEnvKey, ConfigTokenKey } from './constants';
+import { ConfigEnvKey, ConfigToken } from './constants';
 import { parseEnvToJSON } from './helpers';
 import { CorsEnv } from './interfaces';
 
-export default registerAs(ConfigTokenKey.Cors, (): CorsOptions => {
+export default registerAs(ConfigToken.Cors, (): CorsOptions => {
   const CORS_ENV = parseEnvToJSON<CorsEnv>(ConfigEnvKey.Cors);
   return {
     origin: CORS_ENV.ORIGINS.map((regexp) => new RegExp(regexp)),

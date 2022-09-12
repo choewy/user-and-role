@@ -1,11 +1,11 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { readFileSync } from 'fs';
-import { ConfigEnvKey, ConfigTokenKey } from './constants';
+import { ConfigEnvKey, ConfigToken } from './constants';
 import { parseEnvToJSON } from './helpers';
 import { TypeormEnv } from './interfaces';
 
-export default registerAs(ConfigTokenKey.Typeorm, (): TypeOrmModuleOptions => {
+export default registerAs(ConfigToken.Typeorm, (): TypeOrmModuleOptions => {
   const TYPEORM_ENV = parseEnvToJSON<TypeormEnv>(ConfigEnvKey.Typeorm);
   return {
     type: TYPEORM_ENV.TYPE,
