@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Res } from '@nestjs/common';
+import { SwaggerController } from '@swagger/decorators';
+import { Response } from 'express';
+import { AppRouter } from './app.router';
 import { AppService } from './app.service';
 
-@Controller()
+@SwaggerController({ exclude: true })
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @AppRouter.RedirectSwaggerDocs('get')
+  async swaggerDocs(@Res() res: Response): Promise<void> {
+    return res.redirect(this.appService.swaggerPath);
   }
 }
