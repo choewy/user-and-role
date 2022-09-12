@@ -24,6 +24,8 @@
       "@app/*": ["src/_app/*"],
       "@entity": ["src/_entities"],
       "@entity/*": ["src/_entities/*"],
+      "@swagger": ["src/_swagger"],
+      "@swagger/*": ["src/_swagger/*"],
       "@/*": ["src/*"]
     }
   }
