@@ -24,6 +24,8 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "express-basic-auth": "^1.2.1",
+    "helmet": "^6.0.0",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -34,6 +36,7 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/schematics": "^9.0.0",
+    "@nestjs/swagger": "^6.1.2",
     "@nestjs/testing": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "@types/express": "^4.17.13",
@@ -78,6 +81,8 @@
       "^@app/(.*)$": "<rootDir>/_app/$1",
       "^@entity": "<rootDir>/_entities",
       "^@entity/(.*)$": "<rootDir>/_entities/$1",
+      "^@swagger": "<rootDir>/_swagger",
+      "^@swagger/(.*)$": "<rootDir>/_swagger/$1",
       "^@/(.*)$": "<rootDir>/$1"
     }
   }
