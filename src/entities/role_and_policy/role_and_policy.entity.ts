@@ -1,4 +1,6 @@
+import { DateTime } from 'luxon';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { DateTimeColumn } from '../columns';
 import { Policy } from '../policy';
 import { Role } from '../role/role.entity';
 
@@ -20,4 +22,10 @@ export class RoleAndPolicy {
 
   @Column()
   isApply: boolean;
+
+  @DateTimeColumn({ created: true })
+  createdAt: DateTime;
+
+  @DateTimeColumn({ updated: true })
+  updatedAt: DateTime;
 }
