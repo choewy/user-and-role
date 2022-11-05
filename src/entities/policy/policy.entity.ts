@@ -2,11 +2,12 @@ import { DateTime } from 'luxon';
 import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { DateTimeColumn } from '../columns';
 import { RoleAndPolicies } from '../role_and_policies';
+import { PolicyKey } from './enums';
 
 @Entity('policy')
 export class Policy {
   @PrimaryColumn()
-  key: string;
+  key: PolicyKey;
 
   @OneToMany(() => RoleAndPolicies, (e) => e.policy)
   roles: RoleAndPolicies[];

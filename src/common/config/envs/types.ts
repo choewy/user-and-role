@@ -21,3 +21,11 @@ export type DefaultAccountConfigType = {
   accounts: string[];
   passwords: string[];
 };
+
+export type BcryptConfigType = {
+  saltRounds: number;
+};
+
+export type JwtConfigType = {
+  secret: string;
+};

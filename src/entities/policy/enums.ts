@@ -1,4 +1,5 @@
 export enum PolicyKey {
+  Empty = 'empty',
   Global = 'global',
   UserRead = 'user:read',
   UserUpdate = 'user:update',

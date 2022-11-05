@@ -3,4 +3,6 @@ export enum ConfigToken {
   SERVER = 'server',
   TYPEORM = 'typeorm',
   DEFAULT_ACCOUNT = 'defaultAccount',
+  BCRYPT = 'bcrypt',
+  JWT = 'jwt',
 }

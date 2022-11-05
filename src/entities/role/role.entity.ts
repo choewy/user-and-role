@@ -7,7 +7,7 @@ import { UserAndRoles } from '../user_and_roles';
 @Entity('role')
 export class Role {
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  id: number;
 
   @Column()
   name: string;
