@@ -1,15 +1,15 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { Settings as Luxon } from 'luxon';
 import { AppConfigType, ConfigToken, ServerConfigType } from './common';
-
-Luxon.defaultZone = 'Asia/Seoul';
+import { Settings as Luxon } from 'luxon';
 
 export class Bootstrap {
   private static app: INestApplication;
 
   private static async create(module: any) {
+    Luxon.defaultZone = 'Asia/Seoul';
+
     this.app = await NestFactory.create(module);
 
     const { json, urlencoded, cors } = this.app

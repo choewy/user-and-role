@@ -20,6 +20,7 @@ export const DateTimeColumn = (
     if (created === true) {
       return CreateDateColumn({
         type: 'datetime',
+        update: false,
         transformer: new DateTimeTransformer(true),
         ...opt,
       });
@@ -36,6 +37,7 @@ export const DateTimeColumn = (
     if (deleted === true) {
       return DeleteDateColumn({
         type: 'datetime',
+        default: null,
         transformer: new DateTimeTransformer(false),
         ...opt,
       });
