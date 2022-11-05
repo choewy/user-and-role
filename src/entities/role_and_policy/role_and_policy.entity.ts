@@ -1,6 +1,4 @@
-import { DateTime } from 'luxon';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { DateTimeColumn } from '../columns';
 import { Policy } from '../policy';
 import { Role } from '../role/role.entity';
 
@@ -10,19 +8,16 @@ export class RoleAndPolicy {
   roleId: number;
 
   @PrimaryColumn({ primary: false })
-  policyId: number;
+  policyKey: string;
 
   @ManyToOne(() => Role, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
   @ManyToOne(() => Policy, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'policy_id' })
+  @JoinColumn({ name: 'policy_key' })
   policy: Policy;
 
   @Column()
   isApply: boolean;
-
-  @DateTimeColumn()
-  appliedAt: DateTime;
 }
