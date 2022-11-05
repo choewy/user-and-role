@@ -1,0 +1,7 @@
+export enum InjectRowsToken {
+  USERS = 'USERS',
+  ROLES = 'ROLES',
+  POLICIES = 'POLICIES',
+  ROLE_AND_POLICIES = 'ROLE_AND_POLICIES',
+  USER_AND_ROLES = 'USER_AND_ROLES',
+}

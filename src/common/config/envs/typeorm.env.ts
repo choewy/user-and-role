@@ -40,14 +40,16 @@ export default registerAs(
 
         if (type === 'DATE') {
           const val = field.string();
-          return val === null ? null : DateTime.fromFormat(val, 'yyyy-MM-dd');
+          return val === null
+            ? null
+            : DateTime.fromFormat(val.split('.')[0], 'yyyy-MM-dd');
         }
 
         if (type === 'DATETIME') {
           const val = field.string();
           return val === null
             ? null
-            : DateTime.fromFormat(val, 'yyyy-MM-dd HH:mm:ss');
+            : DateTime.fromFormat(val.split('.')[0], 'yyyy-MM-dd HH:mm:ss');
         }
 
         return next();

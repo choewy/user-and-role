@@ -4,11 +4,17 @@ import { PolicyKey } from '../policy';
 import { RoleAndPolicies } from './role_and_policies.entity';
 
 export class DefaultRoleAndPolicy extends ClassEnum<DefaultRoleAndPolicy> {
-  public static readonly Master = new DefaultRoleAndPolicy('Master', 1, [
-    PolicyKey.Global,
+  public static readonly Empty = new DefaultRoleAndPolicy('Empty', 1, [
+    PolicyKey.Empty,
   ]);
 
-  public static readonly Admin = new DefaultRoleAndPolicy('Admin', 2, [
+  public static readonly Master = new DefaultRoleAndPolicy(
+    'Master',
+    2,
+    Object.values(PolicyKey).filter((key) => key !== PolicyKey.Empty),
+  );
+
+  public static readonly Admin = new DefaultRoleAndPolicy('Admin', 3, [
     PolicyKey.RoleRead,
     PolicyKey.RoleCreate,
     PolicyKey.RoleUpdate,
@@ -16,10 +22,6 @@ export class DefaultRoleAndPolicy extends ClassEnum<DefaultRoleAndPolicy> {
     PolicyKey.UserRead,
     PolicyKey.UserUpdate,
     PolicyKey.UserDelete,
-  ]);
-
-  public static readonly User = new DefaultRoleAndPolicy('User', 3, [
-    PolicyKey.UserRead,
   ]);
 
   private readonly id!: number;
@@ -37,9 +39,7 @@ export class DefaultRoleAndPolicy extends ClassEnum<DefaultRoleAndPolicy> {
       plainToInstance(RoleAndPolicies, {
         roleId: this.id,
         policyKey,
-        isApply: this.keys.includes(PolicyKey.Global)
-          ? true
-          : this.keys.includes(policyKey),
+        isApply: this.keys.includes(policyKey),
       }),
     );
   }
