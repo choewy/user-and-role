@@ -1,7 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppConfigType, ConfigToken, ServerConfigType } from './common';
+import {
+  AppConfigType,
+  ConfigToken,
+  ServerConfigType,
+  SwaggerGenerator,
+} from './common';
 import { Settings as Luxon } from 'luxon';
 
 export class Bootstrap {
@@ -19,6 +24,8 @@ export class Bootstrap {
     this.app.use(json);
     this.app.use(urlencoded);
     this.app.enableCors(cors);
+
+    SwaggerGenerator.create(this.app);
   }
 
   private static async listen() {

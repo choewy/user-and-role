@@ -14,3 +14,10 @@ export type ServerConfigType = {
 };
 
 export type TypeOrmConfigType = TypeOrmModuleOptions;
+
+export type DefaultAccountConfigType = {
+  ids: number[];
+  names: string[];
+  accounts: string[];
+  passwords: string[];
+};

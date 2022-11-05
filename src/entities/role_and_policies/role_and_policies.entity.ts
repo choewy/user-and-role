@@ -2,10 +2,10 @@ import { DateTime } from 'luxon';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { DateTimeColumn } from '../columns';
 import { Policy } from '../policy';
-import { Role } from '../role/role.entity';
+import { Role } from '../role';
 
-@Entity('role_and_policy')
-export class RoleAndPolicy {
+@Entity('role_and_policies')
+export class RoleAndPolicies {
   @PrimaryColumn({ primary: false })
   roleId: number;
 
