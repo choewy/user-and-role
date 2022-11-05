@@ -1,7 +1,7 @@
 import { ClassEnum } from 'class-enum';
 import { plainToInstance } from 'class-transformer';
 import { PolicyKey } from '../policy';
-import { RoleAndPolicy } from './role_and_policy.entity';
+import { RoleAndPolicies } from './role_and_policies.entity';
 
 export class DefaultRoleAndPolicy extends ClassEnum<DefaultRoleAndPolicy> {
   public static readonly Master = new DefaultRoleAndPolicy('Master', 1, [
@@ -32,9 +32,9 @@ export class DefaultRoleAndPolicy extends ClassEnum<DefaultRoleAndPolicy> {
     this.keys = keys;
   }
 
-  public getData(): Partial<RoleAndPolicy>[] {
+  public getRows(): Partial<RoleAndPolicies>[] {
     return Object.values(PolicyKey).map((policyKey) =>
-      plainToInstance(RoleAndPolicy, {
+      plainToInstance(RoleAndPolicies, {
         roleId: this.id,
         policyKey,
         isApply: this.keys.includes(PolicyKey.Global)

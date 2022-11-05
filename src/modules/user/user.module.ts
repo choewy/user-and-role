@@ -1,5 +1,6 @@
-import { User } from '@/entities';
+import { ConfigToken, DefaultAccountConfigType } from '@/common';
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
@@ -9,15 +10,23 @@ import { UserService } from './user.service';
   controllers: [UserController],
 })
 export class UserModule implements OnApplicationBootstrap {
-  constructor(private readonly repository: UserRepository) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly repository: UserRepository,
+  ) {}
 
   async onApplicationBootstrap() {
-    const rows: Partial<User>[] = [
-      { name: '관리자' },
-      { name: '사용자' },
-      { name: '테스트' },
-    ];
+    const { names, accounts, passwords } =
+      this.configService.get<DefaultAccountConfigType>(
+        ConfigToken.DEFAULT_ACCOUNT,
+      );
 
-    await this.repository.init(rows);
+    await this.repository.init(
+      names.map((_, i) => ({
+        account: accounts[i],
+        password: passwords[i],
+        name: names[i],
+      })),
+    );
   }
 }

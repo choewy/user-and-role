@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DateTimeColumn } from '../columns';
-import { RoleAndPolicy } from '../role_and_policy';
+import { RoleAndPolicies } from '../role_and_policies';
+import { UserAndRoles } from '../user_and_roles';
 
 @Entity('role')
 export class Role {
@@ -11,8 +12,11 @@ export class Role {
   @Column()
   name: string;
 
-  @OneToMany(() => RoleAndPolicy, (e) => e.roleId)
-  policies: RoleAndPolicy[];
+  @OneToMany(() => RoleAndPolicies, (e) => e.role)
+  policies: RoleAndPolicies[];
+
+  @OneToMany(() => UserAndRoles, (e) => e.role)
+  users: UserAndRoles[];
 
   @DateTimeColumn({ created: true })
   createdAt: DateTime;
