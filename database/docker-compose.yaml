@@ -14,4 +14,4 @@ services:
       - ./data:/var/lib/mysql
       - ./dump:/disk
     ports:
-      - 5001:3306
+      - 33061:3306
