@@ -2,13 +2,11 @@ import { DateTime } from 'luxon';
 import { FindOperator, ValueTransformer } from 'typeorm';
 
 export class DateTimeTransformer implements ValueTransformer {
-  constructor(private readonly autoGenerateMode = false) {}
+  constructor(private readonly autoGenerateMode: boolean) {}
 
   to(
-    value: FindOperator<DateTime> | DateTime | null,
+    value: FindOperator<DateTime> | DateTime | null | undefined,
   ): FindOperator<DateTime> | string | null {
-    console.log(value);
-
     if (value instanceof FindOperator) {
       return value;
     }
@@ -17,7 +15,13 @@ export class DateTimeTransformer implements ValueTransformer {
       return null;
     }
 
-    return value.toSQL({ includeOffset: true });
+    if (value === undefined) {
+      return this.autoGenerateMode === true
+        ? DateTime.local().toSQL({ includeOffset: false })
+        : null;
+    }
+
+    return value.toSQL({ includeOffset: false });
   }
 
   from(value: DateTime | null): DateTime | null {

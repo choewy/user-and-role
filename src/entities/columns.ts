@@ -17,23 +17,33 @@ export const DateTimeColumn = ({
   updated?: boolean;
   deleted?: boolean;
 }) => {
-  const options: ColumnOptions = {
-    type: 'datetime',
-    transformer: new DateTimeTransformer(),
-    ...opt,
-  };
-
   if (created === true) {
-    return CreateDateColumn(options);
+    return CreateDateColumn({
+      type: 'datetime',
+      transformer: new DateTimeTransformer(true),
+      ...opt,
+    });
   }
 
   if (updated === true) {
-    return UpdateDateColumn(options);
+    return UpdateDateColumn({
+      type: 'datetime',
+      transformer: new DateTimeTransformer(true),
+      ...opt,
+    });
   }
 
   if (deleted === true) {
-    return DeleteDateColumn(options);
+    return DeleteDateColumn({
+      type: 'datetime',
+      transformer: new DateTimeTransformer(false),
+      ...opt,
+    });
   }
 
-  return Column(options);
+  return Column({
+    type: 'datetime',
+    transformer: new DateTimeTransformer(false),
+    ...opt,
+  });
 };
