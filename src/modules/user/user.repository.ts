@@ -12,7 +12,10 @@ export class UserRepository {
   }
 
   async init(rows: Partial<User>[]) {
-    await this.userRepository.clear();
+    const tableName = this.dataSource.getMetadata(User).givenTableName;
+    const query = `ALTER TABLE ${tableName} AUTO_INCREMENT = 1;`;
+    await this.userRepository.delete({});
+    await this.userRepository.query(query);
     await this.userRepository.insert(
       rows.map((row) => plainToInstance(User, row)),
     );
