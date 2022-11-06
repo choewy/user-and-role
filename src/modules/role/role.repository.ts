@@ -45,14 +45,6 @@ export class RoleRepository {
     });
   }
 
-  async deleteRole(id: number): Promise<void> {
-    await this.dataSource.transaction(async (em) => {
-      await em.getRepository(RoleAndPolicies).delete({ roleId: id });
-      await em.getRepository(UserAndRoles).delete({ roleId: id });
-      await em.getRepository(Role).softDelete({ id });
-    });
-  }
-
   async updateRole(id: number, name: string): Promise<void> {
     this.roleRepository.update({ id }, { name });
   }
@@ -66,5 +58,13 @@ export class RoleRepository {
       { roleId, policyKey },
       { isApply },
     );
+  }
+
+  async deleteRole(id: number): Promise<void> {
+    await this.dataSource.transaction(async (em) => {
+      await em.getRepository(RoleAndPolicies).delete({ roleId: id });
+      await em.getRepository(UserAndRoles).delete({ roleId: id });
+      await em.getRepository(Role).softDelete({ id });
+    });
   }
 }
