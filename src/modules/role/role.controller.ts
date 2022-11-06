@@ -5,6 +5,7 @@ import {
   Controller,
   Delete,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -21,7 +22,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth';
-import { CreateRoleDto, RoleParamDto } from './dtos';
+import { CreateRoleDto, RoleParamDto, UpdateRoleDto } from './dtos';
 import { RolePolicyMetadata } from './params';
 import { RoleGuard } from './role.guard';
 import { RoleService } from './role.service';
@@ -44,6 +45,26 @@ export class RoleController {
   @ApiForbiddenResponse()
   async createRole(@Body() body: CreateRoleDto): Promise<void> {
     return this.service.createRole(body.name);
+  }
+
+  @Patch(':id')
+  @RolePolicyMetadata(PolicyKey.RoleUpdate)
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiOperation({ summary: '역할 수정' })
+  @ApiBearerAuth('master')
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdateRoleDto })
+  @ApiConsumes(Consumes.X_WWW_FORM, Consumes.JSON)
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  @ApiNotFoundResponse()
+  async updateRole(
+    @Param() params: RoleParamDto,
+    @Body() body: UpdateRoleDto,
+  ): Promise<void> {
+    return this.service.updateRole(params.id, body.name);
   }
 
   @Delete(':id')

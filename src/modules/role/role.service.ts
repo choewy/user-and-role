@@ -7,9 +7,7 @@ export class RoleService {
   constructor(private readonly repository: RoleRepository) {}
 
   async createRole(name: string): Promise<void> {
-    const role = await this.repository.findRoleByName(name);
-
-    if (role) {
+    if (await this.repository.findRoleByName(name)) {
       RoleError.AlreadyExistRole.throw();
     }
 
@@ -21,12 +19,22 @@ export class RoleService {
       RoleError.CannotDeleteRole.throw();
     }
 
-    const role = await this.repository.findRoleById(id);
-
-    if (!role) {
+    if (!(await this.repository.findRoleById(id))) {
       RoleError.NotFoundRole.throw();
     }
 
     return this.repository.deleteRole(id);
+  }
+
+  async updateRole(id: number, name: string): Promise<void> {
+    if (id <= 3) {
+      RoleError.CannotUpdateRole.throw();
+    }
+
+    if (!(await this.repository.findRoleById(id))) {
+      RoleError.NotFoundRole.throw();
+    }
+
+    return this.repository.updateRole(id, name);
   }
 }
