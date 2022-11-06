@@ -30,4 +30,8 @@ export class RoleError extends ClassException {
   public static readonly CannotUpdateRole = new RoleError(
     new BadRequestException('수정할 수 없는 역할입니다.'),
   );
+
+  public static readonly NotFoundPolicy = new RoleError(
+    new NotFoundException('존재하지 않는 정책입니다.'),
+  );
 }

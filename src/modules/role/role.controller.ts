@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -22,10 +23,16 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth';
-import { CreateRoleDto, RoleParamDto, UpdateRoleDto } from './dtos';
 import { RolePolicyMetadata } from './params';
 import { RoleGuard } from './role.guard';
 import { RoleService } from './role.service';
+import {
+  CreateRoleDto,
+  RoleParamDto,
+  UpdateRoleDto,
+  RolePolicyParamDto,
+  RolePolicyQueryParamsDto,
+} from './dtos';
 
 @Controller('roles')
 export class RoleController {
@@ -65,6 +72,28 @@ export class RoleController {
     @Body() body: UpdateRoleDto,
   ): Promise<void> {
     return this.service.updateRole(params.id, body.name);
+  }
+
+  @Patch(':id/:key')
+  @RolePolicyMetadata(PolicyKey.RoleUpdate)
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiOperation({ summary: '역할 권한 수정' })
+  @ApiBearerAuth('master')
+  @ApiBearerAuth()
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  @ApiNotFoundResponse()
+  async updateRolePolicy(
+    @Param() params: RolePolicyParamDto,
+    @Query() queryParams: RolePolicyQueryParamsDto,
+  ) {
+    return this.service.updateRolePolicy(
+      params.id,
+      params.key,
+      queryParams.apply,
+    );
   }
 
   @Delete(':id')

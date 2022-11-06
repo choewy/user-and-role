@@ -6,9 +6,14 @@ import { DataSource, Repository } from 'typeorm';
 @Injectable()
 export class RoleRepository {
   private readonly roleRepository: Repository<Role>;
+  private readonly policyRepository: Repository<Policy>;
+  private readonly roleAndPolicyRepository: Repository<RoleAndPolicies>;
 
   constructor(private readonly dataSource: DataSource) {
     this.roleRepository = this.dataSource.getRepository(Role);
+    this.policyRepository = this.dataSource.getRepository(Policy);
+    this.roleAndPolicyRepository =
+      this.dataSource.getRepository(RoleAndPolicies);
   }
 
   async findRoleByName(name: string): Promise<Role> {
@@ -17,6 +22,10 @@ export class RoleRepository {
 
   async findRoleById(id: number): Promise<Role> {
     return this.roleRepository.findOne({ where: { id } });
+  }
+
+  async findPolicyByKey(key: string): Promise<Policy> {
+    return this.policyRepository.findOne({ where: { key } });
   }
 
   async insertRole(name: string): Promise<void> {
@@ -46,5 +55,16 @@ export class RoleRepository {
 
   async updateRole(id: number, name: string): Promise<void> {
     this.roleRepository.update({ id }, { name });
+  }
+
+  async updateRolePolicy(
+    roleId: number,
+    policyKey: string,
+    isApply: boolean,
+  ): Promise<void> {
+    await this.roleAndPolicyRepository.update(
+      { roleId, policyKey },
+      { isApply },
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -24,6 +24,20 @@ export class Bootstrap {
     this.app.use(json);
     this.app.use(urlencoded);
     this.app.enableCors(cors);
+    this.app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+        validationError: {
+          target: true,
+          value: false,
+        },
+      }),
+    );
 
     await SwaggerGenerator.create(this.app);
   }
