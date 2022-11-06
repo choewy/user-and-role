@@ -1,17 +1,26 @@
 import { Consumes } from '@/common';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
-import { CreatePolicyDto } from './dtos';
+import { CreatePolicyDto, PolicyParamDto } from './dtos';
 import { PolicyService } from './policy.service';
 
 @ApiTags('정책')
@@ -30,5 +39,17 @@ export class PolicyController {
   @ApiUnauthorizedResponse()
   async createPolicy(@Body() body: CreatePolicyDto) {
     return this.service.createPolicy(body.key);
+  }
+
+  @Delete(':key')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: '정책 삭제' })
+  @ApiBearerAuth()
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  async deletePolicy(@Param() params: PolicyParamDto) {
+    return this.service.deletePolicy(params.key);
   }
 }

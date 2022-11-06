@@ -17,7 +17,4 @@ export class Policy {
 
   @DateTimeColumn({ updated: true })
   updatedAt: DateTime;
-
-  @DateTimeColumn({ deleted: true })
-  deletedAt: DateTime;
 }

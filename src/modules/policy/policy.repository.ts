@@ -36,4 +36,11 @@ export class PolicyRepository {
       );
     });
   }
+
+  async deletePolicy(key: string): Promise<void> {
+    await this.dataSource.transaction(async (em) => {
+      await em.getRepository(RoleAndPolicies).delete({ policyKey: key });
+      await em.getRepository(Policy).delete({ key });
+    });
+  }
 }
