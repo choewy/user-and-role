@@ -14,6 +14,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -34,12 +35,14 @@ export class PolicyController {
   @RolePolicyMetadata(PolicyKey.Global)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: '정책 추가' })
+  @ApiBearerAuth('master')
   @ApiBearerAuth()
   @ApiBody({ type: CreatePolicyDto })
   @ApiConsumes(Consumes.X_WWW_FORM, Consumes.JSON)
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
   async createPolicy(@Body() body: CreatePolicyDto) {
     return this.service.createPolicy(body.key);
   }
@@ -48,11 +51,13 @@ export class PolicyController {
   @RolePolicyMetadata(PolicyKey.Global)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: '정책 삭제' })
+  @ApiBearerAuth('master')
   @ApiBearerAuth()
   @ApiOkResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
   async deletePolicy(@Param() params: PolicyParamDto) {
     return this.service.deletePolicy(params.key);
   }

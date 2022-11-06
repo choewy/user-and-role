@@ -19,6 +19,7 @@ export class AuthController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth('master')
   @ApiBearerAuth()
   @ApiOperation({ summary: '인가' })
   async authorize(@UserId() id: number) {
