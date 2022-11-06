@@ -15,4 +15,14 @@ export class PolicyService {
 
     await this.repository.insertPolicy(key);
   }
+
+  async deletePolicy(key: string): Promise<void> {
+    const policy = await this.repository.getPolicyByKey(key);
+
+    if (!policy) {
+      PolicyError.NotFoundPolicy.throw();
+    }
+
+    await this.repository.deletePolicy(key);
+  }
 }
