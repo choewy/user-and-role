@@ -14,18 +14,6 @@ export class RoleService {
     return this.repository.insertRole(name);
   }
 
-  async deleteRole(id: number): Promise<void> {
-    if (id <= 3) {
-      RoleError.CannotDeleteRole.throw();
-    }
-
-    if (!(await this.repository.findRoleById(id))) {
-      RoleError.NotFoundRole.throw();
-    }
-
-    return this.repository.deleteRole(id);
-  }
-
   async updateRole(id: number, name: string): Promise<void> {
     if (id <= 3) {
       RoleError.CannotUpdateRole.throw();
@@ -52,5 +40,17 @@ export class RoleService {
     }
 
     return this.repository.updateRolePolicy(id, key, isApply);
+  }
+
+  async deleteRole(id: number): Promise<void> {
+    if (id <= 3) {
+      RoleError.CannotDeleteRole.throw();
+    }
+
+    if (!(await this.repository.findRoleById(id))) {
+      RoleError.NotFoundRole.throw();
+    }
+
+    return this.repository.deleteRole(id);
   }
 }

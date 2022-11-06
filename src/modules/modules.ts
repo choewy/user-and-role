@@ -55,7 +55,6 @@ export class Modules implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    console.log(this.roles);
     await this.dataSource.transaction(async (em) => {
       await this.initRoles(em);
       await this.initPolicies(em);
