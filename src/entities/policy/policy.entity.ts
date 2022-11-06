@@ -7,7 +7,7 @@ import { PolicyKey } from './enums';
 @Entity('policy')
 export class Policy {
   @PrimaryColumn()
-  key: PolicyKey;
+  key: PolicyKey | string;
 
   @OneToMany(() => RoleAndPolicies, (e) => e.policy)
   roles: RoleAndPolicies[];

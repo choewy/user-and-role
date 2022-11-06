@@ -9,7 +9,7 @@ export class AuthPolicyDto {
     example: Object.values(PolicyKey).join(' | '),
   })
   @Expose()
-  policyKey: PolicyKey;
+  policyKey: PolicyKey | string;
 
   @ApiResponseProperty()
   @Expose()

@@ -10,7 +10,7 @@ export class RoleAndPolicies {
   roleId: number;
 
   @PrimaryColumn({ primary: false })
-  policyKey: PolicyKey;
+  policyKey: PolicyKey | string;
 
   @ManyToOne(() => Role, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'role_id' })

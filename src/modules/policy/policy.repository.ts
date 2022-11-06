@@ -1,5 +1,6 @@
-import { Policy } from '@/entities';
+import { Policy, Role, RoleAndPolicies } from '@/entities';
 import { Injectable } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
@@ -10,13 +11,29 @@ export class PolicyRepository {
     this.policyRepository = this.dataSource.getRepository(Policy);
   }
 
-  async init(query: string[]): Promise<void> {
-    const policies = await this.policyRepository.find();
+  async getPolicyByKey(key: string): Promise<Policy> {
+    return this.policyRepository.findOne({ where: { key } });
+  }
 
-    if (policies.length === 0) {
-      for (const sql of query) {
-        await this.policyRepository.query(sql);
-      }
-    }
+  async insertPolicy(key: string): Promise<void> {
+    await this.dataSource.transaction(async (em) => {
+      const policyRepository = em.getRepository(Policy);
+      const roleRepository = em.getRepository(Role);
+      const roleAndPoliciesRepository = em.getRepository(RoleAndPolicies);
+
+      const { identifiers } = await policyRepository.insert({ key });
+      const policyKey = identifiers[0].key;
+      const roles = await roleRepository.find();
+
+      await roleAndPoliciesRepository.insert(
+        roles.map((role) => {
+          return plainToInstance(RoleAndPolicies, {
+            roleId: role.id,
+            policyKey,
+            isApply: [2, 3].includes(role.id),
+          });
+        }),
+      );
+    });
   }
 }
