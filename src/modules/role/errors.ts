@@ -26,4 +26,8 @@ export class RoleError extends ClassException {
   public static readonly CannotDeleteRole = new RoleError(
     new BadRequestException('삭제할 수 없는 역할입니다.'),
   );
+
+  public static readonly CannotUpdateRole = new RoleError(
+    new BadRequestException('수정할 수 없는 역할입니다.'),
+  );
 }

@@ -43,4 +43,8 @@ export class RoleRepository {
       await em.getRepository(Role).softDelete({ id });
     });
   }
+
+  async updateRole(id: number, name: string): Promise<void> {
+    this.roleRepository.update({ id }, { name });
+  }
 }
