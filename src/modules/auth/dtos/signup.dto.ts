@@ -5,6 +5,7 @@ import { SignInDto } from './signin.dto';
 export class SignUpDto extends SignInDto {
   @ApiProperty({
     description: '비밀번호 확인',
+    format: 'password',
   })
   @IsNotEmpty()
   @IsString()
