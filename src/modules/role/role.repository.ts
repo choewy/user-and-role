@@ -1,4 +1,4 @@
-import { Policy, Role, RoleAndPolicies } from '@/entities';
+import { Policy, Role, RoleAndPolicies, UserAndRoles } from '@/entities';
 import { Injectable } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { DataSource, Repository } from 'typeorm';
@@ -15,6 +15,10 @@ export class RoleRepository {
     return this.roleRepository.findOne({ where: { name } });
   }
 
+  async findRoleById(id: number): Promise<Role> {
+    return this.roleRepository.findOne({ where: { id } });
+  }
+
   async insertRole(name: string): Promise<void> {
     await this.dataSource.transaction(async (em) => {
       const { identifiers } = await em.getRepository(Role).insert({ name });
@@ -29,6 +33,14 @@ export class RoleRepository {
           });
         }),
       );
+    });
+  }
+
+  async deleteRole(id: number): Promise<void> {
+    await this.dataSource.transaction(async (em) => {
+      await em.getRepository(RoleAndPolicies).delete({ roleId: id });
+      await em.getRepository(UserAndRoles).delete({ roleId: id });
+      await em.getRepository(Role).softDelete({ id });
     });
   }
 }

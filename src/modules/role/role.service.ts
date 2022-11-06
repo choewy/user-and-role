@@ -15,4 +15,18 @@ export class RoleService {
 
     return this.repository.insertRole(name);
   }
+
+  async deleteRole(id: number): Promise<void> {
+    if (id <= 3) {
+      RoleError.CannotDeleteRole.throw();
+    }
+
+    const role = await this.repository.findRoleById(id);
+
+    if (!role) {
+      RoleError.NotFoundRole.throw();
+    }
+
+    return this.repository.deleteRole(id);
+  }
 }
