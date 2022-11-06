@@ -17,15 +17,10 @@ export class PolicyRepository {
 
   async insertPolicy(key: string): Promise<void> {
     await this.dataSource.transaction(async (em) => {
-      const policyRepository = em.getRepository(Policy);
-      const roleRepository = em.getRepository(Role);
-      const roleAndPoliciesRepository = em.getRepository(RoleAndPolicies);
-
-      const { identifiers } = await policyRepository.insert({ key });
+      const { identifiers } = await em.getRepository(Policy).insert({ key });
       const policyKey = identifiers[0].key;
-      const roles = await roleRepository.find();
-
-      await roleAndPoliciesRepository.insert(
+      const roles = await em.getRepository(Role).find();
+      await em.getRepository(RoleAndPolicies).insert(
         roles.map((role) => {
           return plainToInstance(RoleAndPolicies, {
             roleId: role.id,

@@ -9,7 +9,10 @@ export class AuthGuard implements CanActivate {
   canActivate(ctx: ExecutionContext): boolean {
     const http = ctx.switchToHttp();
     const request = http.getRequest<Request>();
-    const token = request.headers.authorization.replace('Bearer ', '');
+    const token = (request.headers.authorization || 'Bearer').replace(
+      'Bearer ',
+      '',
+    );
 
     request['user'] = this.jwt.decodeAccessToken(token);
 

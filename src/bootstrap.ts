@@ -25,7 +25,7 @@ export class Bootstrap {
     this.app.use(urlencoded);
     this.app.enableCors(cors);
 
-    SwaggerGenerator.create(this.app);
+    await SwaggerGenerator.create(this.app);
   }
 
   private static async listen() {

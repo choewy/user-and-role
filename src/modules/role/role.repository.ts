@@ -1,5 +1,6 @@
-import { Role } from '@/entities';
+import { Policy, Role, RoleAndPolicies } from '@/entities';
 import { Injectable } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
@@ -10,13 +11,24 @@ export class RoleRepository {
     this.roleRepository = this.dataSource.getRepository(Role);
   }
 
-  async init(query: string[]): Promise<void> {
-    const roles = await this.roleRepository.find();
+  async findRoleByName(name: string): Promise<Role> {
+    return this.roleRepository.findOne({ where: { name } });
+  }
 
-    if (roles.length === 0) {
-      for (const sql of query) {
-        await this.roleRepository.query(sql);
-      }
-    }
+  async insertRole(name: string): Promise<void> {
+    await this.dataSource.transaction(async (em) => {
+      const { identifiers } = await em.getRepository(Role).insert({ name });
+      const roleId = identifiers[0].id;
+      const policies = await em.getRepository(Policy).find();
+      await em.getRepository(RoleAndPolicies).insert(
+        policies.map((policy) => {
+          return plainToInstance(RoleAndPolicies, {
+            roleId,
+            policyKey: policy.key,
+            isApply: false,
+          });
+        }),
+      );
+    });
   }
 }

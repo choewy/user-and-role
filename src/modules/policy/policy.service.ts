@@ -13,7 +13,7 @@ export class PolicyService {
       PolicyError.AlreadyExistPolicy.throw();
     }
 
-    await this.repository.insertPolicy(key);
+    return this.repository.insertPolicy(key);
   }
 
   async deletePolicy(key: string): Promise<void> {
@@ -23,6 +23,6 @@ export class PolicyService {
       PolicyError.NotFoundPolicy.throw();
     }
 
-    await this.repository.deletePolicy(key);
+    return this.repository.deletePolicy(key);
   }
 }
