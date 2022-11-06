@@ -37,4 +37,20 @@ export class RoleService {
 
     return this.repository.updateRole(id, name);
   }
+
+  async updateRolePolicy(id: number, key: string, isApply: boolean) {
+    if (id <= 3) {
+      RoleError.CannotUpdateRole.throw();
+    }
+
+    if (!(await this.repository.findRoleById(id))) {
+      RoleError.NotFoundRole.throw();
+    }
+
+    if (!(await this.repository.findPolicyByKey(key))) {
+      RoleError.NotFoundPolicy.throw();
+    }
+
+    return this.repository.updateRolePolicy(id, key, isApply);
+  }
 }
