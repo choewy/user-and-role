@@ -1,4 +1,5 @@
 import { Consumes } from '@/common';
+import { PolicyKey } from '@/entities';
 import {
   Body,
   Controller,
@@ -19,7 +20,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../auth';
+import { RoleGuard, RolePolicyMetadata } from '../role';
 import { CreatePolicyDto, PolicyParamDto } from './dtos';
 import { PolicyService } from './policy.service';
 
@@ -29,7 +31,8 @@ export class PolicyController {
   constructor(private readonly service: PolicyService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @RolePolicyMetadata(PolicyKey.Global)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: '정책 추가' })
   @ApiBearerAuth()
   @ApiBody({ type: CreatePolicyDto })
@@ -42,7 +45,8 @@ export class PolicyController {
   }
 
   @Delete(':key')
-  @UseGuards(AuthGuard)
+  @RolePolicyMetadata(PolicyKey.Global)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: '정책 삭제' })
   @ApiBearerAuth()
   @ApiOkResponse()
