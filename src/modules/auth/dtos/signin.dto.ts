@@ -11,6 +11,7 @@ export class SignInDto {
 
   @ApiProperty({
     description: '비밀번호',
+    format: 'password',
   })
   @IsNotEmpty()
   @IsString()
